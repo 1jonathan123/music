@@ -11,6 +11,9 @@ DEFAULT_STEP_DURATION = 0.16
 DEFAULT_BEATS_PER_BAR = 4
 OUTPUT_TAIL_SECONDS = 0.05
 VOLUME = 0.35
+STRING_DECAY = 0.996
+AMP_DRIVE = 1.35
+STRING_TONE = 0.62
 
 # Semitone positions relative to C
 NOTE_OFFSETS = {
@@ -34,6 +37,45 @@ NOTE_OFFSETS = {
 }
 
 
+def parse_note_with_octave(value):
+    match = re.fullmatch(r"([A-Ga-g])([#b]?)(\d+)", value.strip())
+    if not match:
+        raise ValueError(f"Expected a note with octave, like A3: {value}")
+
+    note_name = (match.group(1) + match.group(2)).upper()
+    if note_name not in NOTE_OFFSETS:
+        raise ValueError(f"Unknown note: {note_name}")
+
+    return note_name, int(match.group(3))
+
+
+def normalize_default_root(default_root):
+    if default_root is None:
+        return None
+
+    if isinstance(default_root, str):
+        return parse_note_with_octave(default_root)
+
+    note_name, octave = default_root
+    note_name = note_name.upper()
+    if note_name not in NOTE_OFFSETS:
+        raise ValueError(f"Unknown note: {note_name}")
+
+    return note_name, int(octave)
+
+
+def default_octave_for_note(note_name, default_octave, default_root):
+    if default_root is None:
+        return default_octave
+
+    root_note, root_octave = default_root
+    octave = root_octave
+    if NOTE_OFFSETS[note_name] < NOTE_OFFSETS[root_note]:
+        octave += 1
+
+    return octave
+
+
 def note_to_frequency(note_name, octave):
     """
     Convert a note like A4, C5, F#3, Bb4 into a frequency.
@@ -54,8 +96,8 @@ def note_to_frequency(note_name, octave):
 def envelope(length, attack=0.01, decay=0.08):
     env = np.ones(length)
 
-    attack_len = int(attack * SAMPLE_RATE)
-    decay_len = int(decay * SAMPLE_RATE)
+    attack_len = min(int(attack * SAMPLE_RATE), length)
+    decay_len = min(int(decay * SAMPLE_RATE), length)
 
     if attack_len > 0:
         env[:attack_len] = np.linspace(0, 1, attack_len)
@@ -66,36 +108,171 @@ def envelope(length, attack=0.01, decay=0.08):
     return env
 
 
+def guitar_envelope(length):
+    if length == 0:
+        return np.array([], dtype=np.float32)
+
+    env = np.exp(-np.linspace(0, 4.5, length))
+    attack_len = min(int(0.002 * SAMPLE_RATE), length)
+    release_len = min(int(0.012 * SAMPLE_RATE), length)
+
+    if attack_len > 0:
+        env[:attack_len] *= np.linspace(0, 1, attack_len)
+
+    if release_len > 0:
+        env[-release_len:] *= np.linspace(1, 0, release_len)
+
+    return env
+
+
+def low_pass(wave, tone=STRING_TONE):
+    if len(wave) == 0:
+        return wave
+
+    filtered = np.empty_like(wave)
+    filtered[0] = wave[0]
+
+    for index in range(1, len(wave)):
+        filtered[index] = tone * filtered[index - 1] + (1 - tone) * wave[index]
+
+    return filtered
+
+
+def guitar_amp(wave, drive=AMP_DRIVE):
+    if len(wave) == 0:
+        return wave
+
+    driven = np.tanh(wave * drive)
+    return driven / np.tanh(drive)
+
+
+def make_string(
+    freq,
+    duration,
+    decay=STRING_DECAY,
+    brightness=0.45,
+    pick_amount=0.035,
+    tone=STRING_TONE,
+):
+    length = int(SAMPLE_RATE * duration)
+    if length <= 0:
+        return np.array([], dtype=np.float32)
+
+    period = max(2, int(SAMPLE_RATE / freq))
+    buffer = np.random.uniform(-1, 1, period)
+    buffer = brightness * buffer + (1 - brightness) * np.roll(buffer, 1)
+    buffer = low_pass(buffer, tone=0.55)
+    wave = np.zeros(length)
+    index = 0
+
+    for sample_index in range(length):
+        wave[sample_index] = buffer[index]
+        averaged = 0.5 * (buffer[index] + buffer[(index + 1) % period])
+        buffer[index] = averaged * decay
+        index = (index + 1) % period
+
+    pick_len = min(int(0.005 * SAMPLE_RATE), length)
+    if pick_len > 0:
+        pick = np.random.uniform(-1, 1, pick_len) * np.linspace(1, 0, pick_len)
+        wave[:pick_len] += pick * pick_amount
+
+    wave = low_pass(wave, tone=tone)
+    return wave * guitar_envelope(length)
+
+
 def make_note(freq, duration):
-    t = np.linspace(0, duration, int(SAMPLE_RATE * duration), False)
-
-    wave = (
-        np.sin(2 * np.pi * freq * t)
-        + 0.35 * np.sin(2 * np.pi * freq * 2 * t)
-        + 0.15 * np.sin(2 * np.pi * freq * 3 * t)
-    )
-
-    wave *= envelope(len(wave), attack=0.01, decay=0.06)
+    wave = make_string(freq, duration)
+    wave = guitar_amp(wave)
     return wave * VOLUME
+
+
+def dampen_string(wave, amount=24):
+    if len(wave) == 0:
+        return wave
+
+    return wave * np.exp(-np.linspace(0, amount, len(wave)))
+
+
+def make_muted_note(freq, duration):
+    wave = make_string(
+        freq,
+        duration,
+        decay=0.985,
+        brightness=0.38,
+        pick_amount=0.03,
+        tone=0.5,
+    )
+    wave = dampen_string(wave, amount=28)
+    wave = guitar_amp(wave, drive=1.7)
+    return wave * VOLUME * 0.9
+
+
+def make_power_chord(root_freq, duration):
+    fifth_freq = root_freq * (2 ** (7 / 12))
+    octave_freq = root_freq * 2
+    wave = (
+        make_string(root_freq, duration, decay=0.995, brightness=0.5) * 0.75
+        + make_string(
+            root_freq * 1.002,
+            duration,
+            decay=0.995,
+            brightness=0.48,
+        ) * 0.35
+        + make_string(fifth_freq, duration, decay=0.994, brightness=0.46) * 0.58
+        + make_string(octave_freq, duration, decay=0.993, brightness=0.42) * 0.2
+    )
+    wave = guitar_amp(wave, drive=1.75)
+    return wave * VOLUME
+
+
+def make_muted_power_chord(root_freq, duration):
+    fifth_freq = root_freq * (2 ** (7 / 12))
+    wave = (
+        make_string(
+            root_freq,
+            duration,
+            decay=0.982,
+            brightness=0.4,
+            pick_amount=0.03,
+            tone=0.5,
+        ) * 0.85
+        + make_string(
+            fifth_freq,
+            duration,
+            decay=0.98,
+            brightness=0.36,
+            pick_amount=0.025,
+            tone=0.52,
+        ) * 0.55
+    )
+    wave = dampen_string(wave, amount=30)
+    wave = guitar_amp(wave, drive=2.0)
+    return wave * VOLUME * 0.95
 
 
 def make_mute(duration):
     length = int(SAMPLE_RATE * duration)
+    if length <= 0:
+        return np.array([], dtype=np.float32)
 
     noise = np.random.uniform(-1, 1, length)
-    decay = np.exp(-np.linspace(0, 12, length))
+    scrape = noise - np.roll(noise, 1)
+    decay = np.exp(-np.linspace(0, 28, length))
 
     t = np.linspace(0, duration, length, False)
-    thump = np.sin(2 * np.pi * 90 * t) * np.exp(-np.linspace(0, 18, length))
+    thump = np.sin(2 * np.pi * 95 * t) * np.exp(-np.linspace(0, 22, length))
+    string_click = np.sin(2 * np.pi * 1800 * t) * np.exp(
+        -np.linspace(0, 35, length)
+    )
 
-    return (noise * decay * 0.6 + thump * 0.4) * VOLUME
+    return (scrape * decay * 0.35 + thump * 0.5 + string_click * 0.12) * VOLUME
 
 
 def make_rest(duration):
     return np.zeros(int(SAMPLE_RATE * duration))
 
 
-def tokenize_pattern(pattern, default_octave=4):
+def tokenize_pattern(pattern, default_octave=4, default_root=None):
     """
     Turns a pattern string into tokens.
 
@@ -109,10 +286,17 @@ def tokenize_pattern(pattern, default_octave=4):
         A4      note with octave
         C#4     sharp note
         Bb3     flat note
-        A       note using default octave
+        A       note using default octave or default root
+        A@      power chord using default octave or default root
+        A#@     sharp power chord using default octave or default root
+        A3@     power chord with octave
+        A~      muted note using default octave or default root
+        A3~     muted note with octave
+        A3@~    muted power chord with octave
     """
     tokens = []
     i = 0
+    default_root = normalize_default_root(default_root)
 
     while i < len(pattern):
         char = pattern[i]
@@ -151,9 +335,24 @@ def tokenize_pattern(pattern, default_octave=4):
                 octave = int(octave_match.group())
                 i += len(octave_match.group())
             else:
-                octave = default_octave
+                octave = default_octave_for_note(note, default_octave, default_root)
 
-            tokens.append(("note", (note, octave)))
+            is_power_chord = i < len(pattern) and pattern[i] == "@"
+            if is_power_chord:
+                i += 1
+
+            is_muted = i < len(pattern) and pattern[i] == "~"
+            if is_muted:
+                i += 1
+
+            if is_power_chord and is_muted:
+                tokens.append(("muted_power_chord", (note, octave)))
+            elif is_power_chord:
+                tokens.append(("power_chord", (note, octave)))
+            elif is_muted:
+                tokens.append(("muted_note", (note, octave)))
+            else:
+                tokens.append(("note", (note, octave)))
             continue
 
         raise ValueError(f"Unknown symbol at position {i}: {char}")
@@ -187,6 +386,12 @@ def scan_pattern_parts(pattern):
             octave_match = re.match(r"\d+", pattern[i:])
             if octave_match:
                 i += len(octave_match.group())
+
+            if i < len(pattern) and pattern[i] == "@":
+                i += 1
+
+            if i < len(pattern) and pattern[i] == "~":
+                i += 1
 
             parts.append(pattern[start:i])
             continue
@@ -289,7 +494,13 @@ def is_setting_line(line):
         return False
 
     key, _ = line.split("=", 1)
-    return key.strip().lower() in {"step_duration", "bpm", "default_octave", "pattern"}
+    return key.strip().lower() in {
+        "step_duration",
+        "bpm",
+        "default_octave",
+        "default_root",
+        "pattern",
+    }
 
 
 def find_pattern_line_index(lines):
@@ -339,7 +550,7 @@ def write_shaped_pattern_file(path, steps_per_group, groups_per_line=None):
             for line in pattern_body_lines(original_lines, pattern_line_index)
         ]
     else:
-        pattern, _, _, _ = read_pattern_file(riff_path)
+        pattern, _, _, _, _ = read_pattern_file(riff_path)
         shaped_pattern = shape_pattern(pattern, steps_per_group, groups_per_line)
         shaped_lines = shaped_pattern.splitlines()
 
@@ -379,6 +590,21 @@ def token_to_audio(token_type, value, duration):
         freq = note_to_frequency(note_name, octave)
         return make_note(freq, duration)
 
+    if token_type == "muted_note":
+        note_name, octave = value
+        freq = note_to_frequency(note_name, octave)
+        return make_muted_note(freq, duration)
+
+    if token_type == "power_chord":
+        note_name, octave = value
+        freq = note_to_frequency(note_name, octave)
+        return make_power_chord(freq, duration)
+
+    if token_type == "muted_power_chord":
+        note_name, octave = value
+        freq = note_to_frequency(note_name, octave)
+        return make_muted_power_chord(freq, duration)
+
     raise ValueError(f"Cannot turn token into audio: {token_type}")
 
 
@@ -400,11 +626,16 @@ def pattern_to_audio(
     pattern,
     step_duration=DEFAULT_STEP_DURATION,
     default_octave=4,
+    default_root=None,
     bpm=None,
     beats_per_bar=DEFAULT_BEATS_PER_BAR,
 ):
     chunks = []
-    tokens = tokenize_pattern(pattern, default_octave=default_octave)
+    tokens = tokenize_pattern(
+        pattern,
+        default_octave=default_octave,
+        default_root=default_root,
+    )
 
     if bpm is not None:
         if bpm <= 0:
@@ -443,12 +674,14 @@ def play_pattern(
     pattern,
     step_duration=DEFAULT_STEP_DURATION,
     default_octave=4,
+    default_root=None,
     bpm=None,
 ):
     audio = pattern_to_audio(
         pattern,
         step_duration=step_duration,
         default_octave=default_octave,
+        default_root=default_root,
         bpm=bpm,
     )
 
@@ -467,13 +700,13 @@ def read_pattern_file(path):
     Or include settings:
 
         step_duration = 0.12
-        default_octave = 4
+        default_root = A3
         pattern = X__XX_X_A4_XX_X__A4_B3__X_X_A4B4C5B4A4G4A4
 
     Or use bpm timing, where each bar fills one 4-beat measure:
 
         bpm = 120
-        default_octave = 4
+        default_root = A3
         pattern =
             X__XX_X_ | A4_B3__
     """
@@ -482,6 +715,7 @@ def read_pattern_file(path):
     step_duration = None
     bpm = None
     default_octave = None
+    default_root = None
     pattern_lines = []
 
     for line in text.splitlines():
@@ -501,6 +735,8 @@ def read_pattern_file(path):
                 bpm = float(value)
             elif key == "default_octave":
                 default_octave = int(value)
+            elif key == "default_root":
+                default_root = parse_note_with_octave(value)
             elif key == "pattern":
                 if value:
                     pattern_lines.append(value)
@@ -514,7 +750,7 @@ def read_pattern_file(path):
     if step_duration is not None and bpm is not None:
         raise ValueError("Use either step_duration or bpm in a riff file, not both.")
 
-    return pattern, step_duration, bpm, default_octave
+    return pattern, step_duration, bpm, default_octave, default_root
 
 
 def main():
@@ -555,7 +791,16 @@ def main():
         "--default-octave",
         type=int,
         default=None,
-        help="Octave used when a note has no octave number.",
+        help="Octave used when a note has no octave number and no default root.",
+    )
+
+    parser.add_argument(
+        "--default-root",
+        default=None,
+        help=(
+            "Root note used to choose default octaves for bare notes, e.g. A3 "
+            "makes A/B default to octave 3 and C-G default to octave 4."
+        ),
     )
 
     parser.add_argument(
@@ -586,11 +831,16 @@ def main():
     file_step_duration = None
     file_bpm = None
     file_default_octave = None
+    file_default_root = None
 
     if args.file:
-        file_pattern, file_step_duration, file_bpm, file_default_octave = (
-            read_pattern_file(args.file)
-        )
+        (
+            file_pattern,
+            file_step_duration,
+            file_bpm,
+            file_default_octave,
+            file_default_root,
+        ) = read_pattern_file(args.file)
 
     pattern = args.pattern or file_pattern
     if not pattern:
@@ -621,11 +871,17 @@ def main():
         if file_default_octave is not None
         else 4
     )
+    default_root = (
+        args.default_root
+        if args.default_root is not None
+        else file_default_root
+    )
 
     play_pattern(
         pattern,
         step_duration=step_duration,
         default_octave=default_octave,
+        default_root=default_root,
         bpm=bpm,
     )
 
