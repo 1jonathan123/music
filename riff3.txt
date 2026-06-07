@@ -1,0 +1,6 @@
+step_duration = 0.15
+default_octave = 4
+pattern =
+A3@_A3@A3@G3@_G3@G3@ F3@_F3@F3@A3@_A3@_ E4_E4E4D4_D4D4 B3_B3B3A3_A3_
+A3_A3A3B3_B3B3 C4_C4C4D4_D4_ E4_E4E4D4_D4D4 C4_C4C4B3_A3_
+____

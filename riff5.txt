@@ -1,0 +1,7 @@
+step_duration = 0.15
+default_root = A3
+pattern =
+X_XXX_A_ X_XXXAC_ X_XXX_E_ X_XXXCA_
+A_AABC_ CCDE_EE FE_CBA_
+A@_A@A@G3@_G3@G3@ F3@_F3@F3@G3@_A@_
+____

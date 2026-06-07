@@ -1,0 +1,6 @@
+step_duration = 0.15
+default_octave = 4
+pattern =
+X_XX_A3B3_ X_XX_A3B3C4 _X_XX_C4B3 _X_XX_C4B3 A3___
+A3_A3A3_B3_C4 _X_XX_A3B3 C4_X_XX_C4 B3_X_XX_C4 B3A3__
+A3_A3A3_B3_C4 _D4_D4D4_C4B3 A3_A3_A3A3_C4 _D4_E4_E4E4_ D4C4A3__
