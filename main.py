@@ -14,6 +14,13 @@ VOLUME = 0.35
 STRING_DECAY = 0.996
 AMP_DRIVE = 1.35
 STRING_TONE = 0.62
+RINGABLE_TOKEN_TYPES = {
+    "note",
+    "muted_note",
+    "power_chord",
+    "muted_power_chord",
+}
+COMMENT_PREFIXES = ("#", "%")
 
 # Semitone positions relative to C
 NOTE_OFFSETS = {
@@ -282,6 +289,7 @@ def tokenize_pattern(pattern, default_octave=4, default_root=None):
     Supported:
         _       rest
         X       muted hit
+        -       let the previous note/chord ring for one more step
         |       bar separator, only used with bpm timing
         A4      note with octave
         C#4     sharp note
@@ -312,6 +320,11 @@ def tokenize_pattern(pattern, default_octave=4, default_root=None):
 
         if char == "_":
             tokens.append(("rest", None))
+            i += 1
+            continue
+
+        if char == "-":
+            tokens.append(("let_ring", None))
             i += 1
             continue
 
@@ -371,7 +384,7 @@ def scan_pattern_parts(pattern):
             i += 1
             continue
 
-        if char in ["_", "|"] or char.upper() == "X":
+        if char in ["_", "-", "|"] or char.upper() == "X":
             parts.append(char)
             i += 1
             continue
@@ -489,6 +502,10 @@ def shape_pattern_with_line_counts(pattern, steps_per_group, line_group_counts):
     return "\n".join(lines)
 
 
+def is_comment_line(line):
+    return line.strip().startswith(COMMENT_PREFIXES)
+
+
 def is_setting_line(line):
     if "=" not in line:
         return False
@@ -516,7 +533,7 @@ def pattern_body_lines(original_lines, pattern_line_index):
         return [
             line.strip()
             for line in original_lines
-            if line.strip() and not line.strip().startswith("#")
+            if line.strip() and not is_comment_line(line)
         ]
 
     lines = []
@@ -528,9 +545,9 @@ def pattern_body_lines(original_lines, pattern_line_index):
     while index < len(original_lines):
         line = original_lines[index]
         stripped = line.strip()
-        if stripped and not stripped.startswith("#") and is_setting_line(line):
+        if stripped and not is_comment_line(line) and is_setting_line(line):
             break
-        if stripped and not stripped.startswith("#"):
+        if stripped and not is_comment_line(line):
             lines.append(stripped)
         index += 1
 
@@ -565,7 +582,7 @@ def write_shaped_pattern_file(path, steps_per_group, groups_per_line=None):
         suffix_index = pattern_line_index + 1
         while suffix_index < len(original_lines):
             line = original_lines[suffix_index]
-            if line.strip() and not line.strip().startswith("#") and is_setting_line(line):
+            if line.strip() and not is_comment_line(line) and is_setting_line(line):
                 break
             suffix_index += 1
 
@@ -608,6 +625,27 @@ def token_to_audio(token_type, value, duration):
     raise ValueError(f"Cannot turn token into audio: {token_type}")
 
 
+def merge_let_ring_tokens(timed_tokens):
+    events = []
+
+    for token_type, value, duration in timed_tokens:
+        if token_type == "let_ring":
+            if not events or events[-1][0] not in RINGABLE_TOKEN_TYPES:
+                raise ValueError("Let-ring '-' requires a previous note or chord.")
+
+            previous_type, previous_value, previous_duration = events[-1]
+            events[-1] = (
+                previous_type,
+                previous_value,
+                previous_duration + duration,
+            )
+            continue
+
+        events.append((token_type, value, duration))
+
+    return events
+
+
 def split_tokens_into_bars(tokens):
     bars = [[]]
 
@@ -630,12 +668,12 @@ def pattern_to_audio(
     bpm=None,
     beats_per_bar=DEFAULT_BEATS_PER_BAR,
 ):
-    chunks = []
     tokens = tokenize_pattern(
         pattern,
         default_octave=default_octave,
         default_root=default_root,
     )
+    timed_tokens = []
 
     if bpm is not None:
         if bpm <= 0:
@@ -646,7 +684,7 @@ def pattern_to_audio(
         for bar in split_tokens_into_bars(tokens):
             token_duration = bar_duration / len(bar)
             for token_type, value in bar:
-                chunks.append(token_to_audio(token_type, value, token_duration))
+                timed_tokens.append((token_type, value, token_duration))
     else:
         for token_type, value in tokens:
             if token_type == "bar":
@@ -654,7 +692,12 @@ def pattern_to_audio(
                     "Bars require bpm timing; use bpm instead of step_duration."
                 )
 
-            chunks.append(token_to_audio(token_type, value, step_duration))
+            timed_tokens.append((token_type, value, step_duration))
+
+    chunks = [
+        token_to_audio(token_type, value, duration)
+        for token_type, value, duration in merge_let_ring_tokens(timed_tokens)
+    ]
 
     if not chunks:
         return np.array([], dtype=np.float32)
@@ -721,7 +764,7 @@ def read_pattern_file(path):
     for line in text.splitlines():
         line = line.strip()
 
-        if not line or line.startswith("#"):
+        if not line or is_comment_line(line):
             continue
 
         if "=" in line:
