@@ -1,0 +1,8 @@
+step_duration = 0.15
+default_root = A3
+pattern =
+X_____X_ ____X_XX _XX__X__
+A-----B- ----C_B~C _B~C--D--
+D-----E- ----F_E~F _E~F--G--
+G-----E- ----G_E~G _E~G--C--
+B---C~B-- C--B---- -A------

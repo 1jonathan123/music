@@ -1,0 +1,5 @@
+step_duration = 0.15
+default_root = E3
+pattern =
+A@A@XA@A@XA@XA@A@G3@XXG@G@XG@G@XG@XG@G@F@XXF@F@XF@F@XF@XF@F@E@XXE@XE@E@E@XE@E@E@XE@XA@XX
+___

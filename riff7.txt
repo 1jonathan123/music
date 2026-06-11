@@ -1,4 +1,4 @@
-step_duration = 0.2
+step_duration = 0.15
 default_root = A3
 pattern =
 X_____X_ ____X_XX _XX__X__
@@ -6,3 +6,6 @@ A-----B- ----C_BC _BC--D--
 D-----E- ----F_EF _EF--G--
 G-----E- ----G_EG _EG--C--
 B---CB-- C--B---- -A------
+
+A-----B- ----C_BC _BC--D--
+C_BC_BC- -DE-F_EF _EF--G--
