@@ -528,30 +528,50 @@ def find_pattern_line_index(lines):
     return None
 
 
-def pattern_body_lines(original_lines, pattern_line_index):
+def pattern_block_end_index(original_lines, pattern_line_index):
     if pattern_line_index is None:
-        return [
-            line.strip()
-            for line in original_lines
-            if line.strip() and not is_comment_line(line)
-        ]
-
-    lines = []
-    pattern_value = original_lines[pattern_line_index].split("=", 1)[1].strip()
-    if pattern_value:
-        lines.append(pattern_value)
+        return len(original_lines)
 
     index = pattern_line_index + 1
     while index < len(original_lines):
         line = original_lines[index]
-        stripped = line.strip()
-        if stripped and not is_comment_line(line) and is_setting_line(line):
+        if line.strip() and not is_comment_line(line) and is_setting_line(line):
             break
-        if stripped and not is_comment_line(line):
-            lines.append(stripped)
         index += 1
 
-    return lines
+    return index
+
+
+def shape_pattern_lines_preserving_comments(lines, steps_per_group, groups_per_line):
+    shaped_lines = []
+    active_lines = []
+
+    def flush_active_lines():
+        if not active_lines:
+            return
+
+        if groups_per_line is None:
+            shaped_lines.extend(
+                shape_pattern_line(line.strip(), steps_per_group)
+                for line in active_lines
+            )
+        else:
+            pattern = "".join(line.strip() for line in active_lines)
+            shaped_lines.extend(
+                shape_pattern(pattern, steps_per_group, groups_per_line).splitlines()
+            )
+
+        active_lines.clear()
+
+    for line in lines:
+        if not line.strip() or is_comment_line(line):
+            flush_active_lines()
+            shaped_lines.append(line)
+        else:
+            active_lines.append(line)
+
+    flush_active_lines()
+    return shaped_lines
 
 
 def write_shaped_pattern_file(path, steps_per_group, groups_per_line=None):
@@ -561,30 +581,28 @@ def write_shaped_pattern_file(path, steps_per_group, groups_per_line=None):
     original_lines = text.splitlines()
 
     pattern_line_index = find_pattern_line_index(original_lines)
-    if groups_per_line is None:
-        shaped_lines = [
-            shape_pattern_line(line, steps_per_group)
-            for line in pattern_body_lines(original_lines, pattern_line_index)
-        ]
-    else:
-        pattern, _, _, _, _ = read_pattern_file(riff_path)
-        shaped_pattern = shape_pattern(pattern, steps_per_group, groups_per_line)
-        shaped_lines = shaped_pattern.splitlines()
 
     if pattern_line_index is None:
+        shaped_lines = shape_pattern_lines_preserving_comments(
+            original_lines, steps_per_group, groups_per_line
+        )
         new_lines = shaped_lines
     else:
         pattern_line = original_lines[pattern_line_index]
         indent = pattern_line[: len(pattern_line) - len(pattern_line.lstrip())]
+        pattern_value = pattern_line.split("=", 1)[1].strip()
+        suffix_index = pattern_block_end_index(original_lines, pattern_line_index)
+        pattern_lines = []
+        if pattern_value:
+            pattern_lines.append(pattern_value)
+        pattern_lines.extend(original_lines[pattern_line_index + 1 : suffix_index])
+
+        shaped_lines = shape_pattern_lines_preserving_comments(
+            pattern_lines, steps_per_group, groups_per_line
+        )
+
         replacement = [f"{indent}pattern ="]
         replacement.extend(shaped_lines)
-
-        suffix_index = pattern_line_index + 1
-        while suffix_index < len(original_lines):
-            line = original_lines[suffix_index]
-            if line.strip() and not is_comment_line(line) and is_setting_line(line):
-                break
-            suffix_index += 1
 
         new_lines = (
             original_lines[:pattern_line_index]
