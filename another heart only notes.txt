@@ -1,0 +1,26 @@
+step_duration = 0.14
+default_root = A3
+pattern =
+A----BC- -B----BC --D---DE F--E----
+
+G----FE- -F----FE --F---FE --D-----
+
+E----DC- -B----CA -A~-A~---
+
+B----CB- -C----C- -D----EF --E-----
+
+G----FE- -F----FE --D---F- --D-----
+
+ED--C--- B----A-- --A~--A~--
+
+A----BC- -B----B- -C----A@- -G@------
+
+D----E-F ---E-F-E ----F--D ---B2@----
+
+A----BC- -B----BC --D---DE FEF-----
+
+G----FE- -F----FE --D---F- --D-----
+
+ED--C--- B----A-- --A~--A~--
+----
+___
