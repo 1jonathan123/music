@@ -1,0 +1,32 @@
+step_duration = 0.10
+default_root = A3
+pattern =
+X__XXX_X __X_X_X_ _X_X_X__ X_X_X___
+X__XXX_X __X_X_X_ _X_X_X_X _X__X___
+
+% Ever we are going forward
+AA-BB-C-B-_C-D-E-
+
+% Until we fall from the edge of the world
+EF-E-C-BBB-AAA---
+
+% We have seen many things on our way
+AA-B-CCB--C-D-E-
+
+% But all we want is void and dismay
+FF--E-D-C-B-CBA
+
+% We crossed the endless sea
+AA-BCBA--
+
+% We walked a thousand miles
+AG-ABAG--
+
+% But all - we found - is more sand and more tiles -
+A-A@--B-B@
+
+% More trees, more wood
+A-D---A-E---
+% More humans, more flesh
+A-EF---DB---
+% We are waiting for the void, for anything fresh

@@ -1,0 +1,28 @@
+step_duration = 0.12
+default_root = A3
+pattern =
+% We have always been together since the dawn of night
+ABCB-CDED-FEDCB
+
+% Faced all the humans' might
+FEDCBA--
+
+% All their fear! all their hate! far too little and too late.
+ABD--ABE--FEDFEDC---E@---
+
+% cause we have been together...
+ED-ED-CBA--
+
+% We gave it all, we shared our path
+AEDE--GFEF---
+
+% The humans couldn't stand our wrath
+AGFEFEDC--
+
+% But - you left it
+E-DDD
+% But - you broke it
+F-CCC
+
+% And now we are fighting alone
+AD--CBC--BAA---

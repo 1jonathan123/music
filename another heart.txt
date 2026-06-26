@@ -20,7 +20,7 @@ E----DC- -B----CA -A~-A~---
 B----CB- -C----C- -D----EF --E-----
 
 % so, forever, we are torn apart
-G----FE- -F----FE --D---F- --D-----
+G----FE- -F----FE --F---E- --D-----
 
 % Forever,
 % we do...oo..
@@ -40,7 +40,7 @@ D----E-F ---E-F-E ----F--D ---B2@----
 A----BC- -B----BC --D---DE FEF-----
 
 % And, we'll be, together again
-G----FE- -F----FE --D---F- --D-----
+G----FE- -F----FE --F---E- --D-----
 
 % together again...
 ED--C--- B----A-- --A~--A~--
