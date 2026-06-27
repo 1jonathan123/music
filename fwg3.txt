@@ -1,0 +1,51 @@
+step_duration = 0.075
+default_root = A3
+pattern =
+%X_X_XXX_ X_X_XXX_
+%X_X_XXX_ X_X_X___
+%X_X_XXX_ X_X_XXX_
+%X_X_XXX_ X__XX___
+
+%A-A-BBC- B-C-DDE-
+
+% Ever we are going forward
+A--A---B--B---C- --B--C--D--E----
+% Until we fall from the edge of the world
+EF-E-C-BBB-AAA--
+% We have seen many things on our way
+AA-B-CCB-C-D-E--
+% But all we want is void and dismay
+EF-E-D-C-B-CBA--
+% -
+C-CBA---
+
+% We rode the endless land
+AA-BCBA---A@----
+% We sailed a thousand miles
+AG3-ABAG3---G3@----
+% But all - we found - is more sand and more tiles -
+G3F3-G3-A--BBC-CBA- --A@----
+% -
+BC-CBA----B@----
+
+% Ever walking on our feet
+AA-BB-CBC---
+% Ever sailing on our fleet
+BB-CC-EDE---
+% Ever feeling numb and pain
+DD-EE-FEF---
+% Ever hating this terrain
+FEDCBAA---
+%
+FEDCBAA---
+
+% The map contains it all
+AA-BCBA--
+% No matter where we crawl
+AG3-ABAG3--
+% Filled from end to end
+G3-F3-G3AB-
+% No matter where we land
+C-BCBAA--
+% -
+C-BCBAA---

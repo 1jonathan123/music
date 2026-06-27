@@ -613,6 +613,22 @@ def write_shaped_pattern_file(path, steps_per_group, groups_per_line=None):
     riff_path.write_text(newline.join(new_lines) + newline, encoding="utf-8")
 
 
+def write_compact_pattern_file(path):
+    riff_path = Path(path)
+    text = riff_path.read_text(encoding="utf-8")
+    newline = "\r\n" if "\r\n" in text else "\n"
+    keep_trailing_newline = text.endswith(("\n", "\r"))
+    compact_lines = [
+        line for line in text.splitlines() if not is_comment_line(line)
+    ]
+    compact_text = newline.join(compact_lines)
+
+    if keep_trailing_newline and compact_text:
+        compact_text += newline
+
+    riff_path.write_text(compact_text, encoding="utf-8")
+
+
 def token_to_audio(token_type, value, duration):
     if token_type == "rest":
         return make_rest(duration)
@@ -875,7 +891,16 @@ def main():
         ),
     )
 
+    parser.add_argument(
+        "--compact",
+        action="store_true",
+        help="Rewrite the riff file without comment lines.",
+    )
+
     args = parser.parse_args()
+
+    if args.auto_shape and args.compact:
+        raise SystemExit("Use either --auto-shape or --compact, not both.")
 
     if args.auto_shape:
         if not args.file:
@@ -886,6 +911,13 @@ def main():
         steps_per_group = args.auto_shape[0]
         groups_per_line = args.auto_shape[1] if len(args.auto_shape) == 2 else None
         write_shaped_pattern_file(args.file, steps_per_group, groups_per_line)
+        return
+
+    if args.compact:
+        if not args.file:
+            raise SystemExit("--compact requires a riff file.")
+
+        write_compact_pattern_file(args.file)
         return
 
     file_pattern = None

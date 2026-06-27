@@ -1,9 +1,6 @@
-step_duration = 0.10
+step_duration = 0.15
 default_root = A3
 pattern =
-X__XXX_X __X_X_X_ _X_X_X__ X_X_X___
-X__XXX_X __X_X_X_ _X_X_X_X _X__X___
-
 % Ever we are going forward
 AA-BB-C-B-_C-D-E-
 % Until we fall from the edge of the world
@@ -34,7 +31,6 @@ AA-B-CCB--C-D-E-
 EF--E-D-C-B-CBA
 % -
 C--CBA--
-
 
 % The map contains it all
 AA-BCBA--
