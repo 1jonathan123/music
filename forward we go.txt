@@ -6,27 +6,52 @@ X__XXX_X __X_X_X_ _X_X_X_X _X__X___
 
 % Ever we are going forward
 AA-BB-C-B-_C-D-E-
-
 % Until we fall from the edge of the world
 EF-E-C-BBB-AAA---
-
 % We have seen many things on our way
 AA-B-CCB--C-D-E-
-
 % But all we want is void and dismay
-FF--E-D-C-B-CBA
+EF--E-D-C-B-CBA
+% -
+C--CBA--
 
-% We crossed the endless sea
+% We rode the endless land
 AA-BCBA--
-
-% We walked a thousand miles
-AG-ABAG--
-
+% We sailed a thousand miles
+AG3-ABAG3--
 % But all - we found - is more sand and more tiles -
-A-A@--B-B@
+G3F3--G3-A--BBC-CBA---
+% -
+CCC-CBA--
+
+% Cause ever we are going forward
+AAA-BB-C-B-_C-D-E-
+% Until we fall from the edge of the world
+EF-E-C-BBB-AAA---
+% We have seen many things on our way
+AA-B-CCB--C-D-E-
+% But all we want is void and dismay
+EF--E-D-C-B-CBA
+% -
+C--CBA--
+
+
+% The map contains it all
+AA-BCBA--
+% No matter where we crawl
+AG3-ABAG3--
+% Filled from end to end
+G3-F3-G3AB-
+% No matter where we land
+C-BCBAA
+% -
+C-BCBAA
 
 % More trees, more wood
 A-D---A-E---
 % More humans, more flesh
 A-EF---DB---
-% We are waiting for the void, for anything fresh
+% But nothing is new
+% Not the land, not you
+% First time for everything, long ago
+% Storm, typhone, death, snow
