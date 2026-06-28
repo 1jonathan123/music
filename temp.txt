@@ -1,20 +1,14 @@
-step_duration = 0.075
+step_duration = 0.101
 default_root = A3
 pattern =
 
-% Ever we are going forward
-%A-A--B-B---C---B ---C---D---E----
-% Until we fall from the edge of the world
-%E-F---E---C----B -B-B---A-A-A----
-% We have seen many things on our way
-%A-A---B---C-C--B ---C---D---E----
-% But all we want is void and dismay
-%E-F---E---D---C- --B---C-B-A-----
+% But nothing here is new
+A--A---BC-B-A---
+% Not the land, not you
+--G3--AB-A-G3-----
+% First time for everything - but very long ago
+G3-F3---G3---A-A-G3- --AB--BC--CA----
+% Storm, tsunami, death and snow
+_E----D-C-B----C ----B----A------
 
-% We rode the endless land, we sailed a thousand miles
-A-A---B-C ---B---A 
-%----A-G3- --A--B-- A--G3----
-% But all - we found - is more sand and more tiles -
-%G3-F3---G3---A---B- -B--C--C-B-A----
-
-____
+__
