@@ -18,15 +18,6 @@ A-G3--AB-A-G3-----
 % But all - we found - is more sand and more tiles -
 G3-F3---G3---A---B- B-C---C-B-A-----
 
-% Ever walking on our feet
-A-A--B-C-B-A-A--
-% Ever sailing on our fleet
-A-G3--A-B-A-G3-G3--
-% Ever feeling numb and pain
-G3-F3--G3-A-B-A-A--
-% Ever hating this terrain
-F-E-D-C-B-A-A---
-
 % The map contains it all
 A-A--BC-B-A-----
 % No matter where we crawl
@@ -36,14 +27,41 @@ G3---F3---G3-A-B---
 % No matter where we land
 C---B-C-B-A-A---
 
-% But nothing here is new
+% (Cause) ever we are going forward
+A-A---B-C-B---A- --B---C---D-----
+% Until we fall from the edge of the world
+E-F---E---C---B- B-B---A-A-A-----
+% We have seen many things on our way
+A-A---B---C-B-A- --C---D---E-----
+% But all we want is void and dismay
+E-F---E---D---C- --B---C-B-A-----
+
+% Ever walking on our feet
+A-A--B-C-B-A-A--
+% Ever sailing on our fleet
+A-G3--A-B-A-G3-G3--
+% Ever feeling numb and pain
+G3-F3--G3-A-B-A-A--
+% Ever hating this terrain
+F-E-D-C-B-A-A---
+
+% Cause nothing here is new
 A--A---BC-B-A---
 % Not the land, not you
 --G3--AB-A-G3-----
 % First time for everything - but very long ago
-G3-F3---G3---A-A-G3- --AB--BC--CA----
+G3-F3---G3---A-A-G3- --AB--BC--CB----
 % Storm, tsunami, death and snow
 _E----D-C-B----C ----B----A------
+
+% (Cause) ever we are going forward
+A-A---B-C-B---A- --B---C---D-----
+% Until we fall from the edge of the world
+E-F---E---C---B- B-B---A-A-A-----
+% We have seen many things on our way
+A-A---B---C-B-A- --C---D---E-----
+% But all we want is void and dismay
+E-F---E---D---C- --B---C-B-A-----
 
 
 ____
