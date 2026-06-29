@@ -1,14 +1,17 @@
-step_duration = 0.101
+step_duration = 0.2001
 default_root = A3
 pattern =
 
-% But nothing here is new
-A--A---BC-B-A---
-% Not the land, not you
---G3--AB-A-G3-----
-% First time for everything - but very long ago
-G3-F3---G3---A-A-G3- --AB--BC--CA----
-% Storm, tsunami, death and snow
-_E----D-C-B----C ----B----A------
+% Ever we are going forward
+%AABCB-A- B-C-D-X_
+% Until we fall from the edge of the world
+%EF-E-C-B BB-AAA--
+% We have seen many things on our way
+AB-C-BA- C-D-E-X_
+% But all we want is void and dismay
+EFE-D-C- B-CBA-X_
 
-__
+% -
+B-CBA-X_
+
+___
