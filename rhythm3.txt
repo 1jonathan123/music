@@ -1,0 +1,3 @@
+step_duration = 0.125
+default_root = A2
+pattern =

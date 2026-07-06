@@ -1,0 +1,31 @@
+step_duration = 0.125
+default_root = A3
+pattern =
+% Im here but for today
+A_B-C_B-C_B-A___
+% And tomorrow I will sail
+A_B-C_B-C_B-D___
+% I will sail so far away
+D_E-F_E-F_E-D___
+% Won't answer, any mail
+F_E-D___C_B-A___
+
+% You won't see me anymore
+A_B-C_B-C_B-A___
+% Walk away and slam the door
+A_B-C_B-C_B-D___
+% Leaving at the end of dawn
+D_E-F_E-F_E-D___
+% You are now, all alone
+F_E-D___C_B-A___
+
+% One, ship per destiny
+A___C_B-C_B-A___
+% Good, luck in finding me
+A___C_B-C_B-D___
+% I, won't be anywere
+D___F_E-F_E-D___
+% You don't know, I don't care
+F_E-D___C_B-A___
+
+____

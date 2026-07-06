@@ -1,0 +1,20 @@
+step_duration = 0.125
+default_root = A2
+pattern =
+E@-E@E@E@-E@E@E@-D@-D@---
+D@-D@D@D@-D@D@D@-C@-C@---
+C@-C@C@C@-C@C@C@-B@-B@---
+B@-B@-B@---C@-C@-C@---
+
+E@-E@E@E@-E@E@E@-D@-D@---
+D@-D@D@D@-D@D@D@-C@-C@---
+C@-C@C@C@-C@C@C@-B@-B@---
+B@-B@-B@---C@-C@-C@---
+
+E@-E@E@E@-E@E@E@-D@-D@---
+D@-D@D@D@-D@D@D@-C@-C@---
+C@-C@C@C@-C@C@C@-B@-B@---
+B@-B@-B@---C@-C@-C@---
+
+
+____

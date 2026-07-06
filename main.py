@@ -738,13 +738,34 @@ def pattern_to_audio(
 
     audio = np.concatenate(chunks)
     audio = np.concatenate([audio, make_rest(OUTPUT_TAIL_SECONDS)])
+    return normalize_audio(audio)
 
-    # Prevent clipping
+
+def normalize_audio(audio):
     max_amp = np.max(np.abs(audio))
     if max_amp > 0:
-        audio = audio / max_amp * 0.9
+        return audio / max_amp * 0.9
 
     return audio
+
+
+def mix_audio_tracks(tracks):
+    tracks = [track for track in tracks if len(track) > 0]
+    if not tracks:
+        return np.array([], dtype=np.float32)
+
+    max_length = max(len(track) for track in tracks)
+    mixed = np.zeros(max_length)
+
+    for track in tracks:
+        mixed[: len(track)] += track
+
+    return normalize_audio(mixed)
+
+
+def play_audio(audio):
+    sd.play(audio, SAMPLE_RATE)
+    sd.wait()
 
 
 def play_pattern(
@@ -762,8 +783,7 @@ def play_pattern(
         bpm=bpm,
     )
 
-    sd.play(audio, SAMPLE_RATE)
-    sd.wait()
+    play_audio(audio)
 
 
 def read_pattern_file(path):
@@ -836,9 +856,9 @@ def main():
     )
 
     parser.add_argument(
-        "file",
-        nargs="?",
-        help="Optional pattern file to run.",
+        "files",
+        nargs="*",
+        help="Optional pattern file(s) to run at the same time.",
     )
 
     parser.add_argument(
@@ -903,80 +923,104 @@ def main():
         raise SystemExit("Use either --auto-shape or --compact, not both.")
 
     if args.auto_shape:
-        if not args.file:
-            raise SystemExit("--auto-shape requires a riff file.")
+        if not args.files:
+            raise SystemExit("--auto-shape requires at least one riff file.")
         if len(args.auto_shape) not in {1, 2}:
             raise SystemExit("--auto-shape expects STEPS or STEPS GROUPS.")
 
         steps_per_group = args.auto_shape[0]
         groups_per_line = args.auto_shape[1] if len(args.auto_shape) == 2 else None
-        write_shaped_pattern_file(args.file, steps_per_group, groups_per_line)
+        for file in args.files:
+            write_shaped_pattern_file(file, steps_per_group, groups_per_line)
         return
 
     if args.compact:
-        if not args.file:
-            raise SystemExit("--compact requires a riff file.")
+        if not args.files:
+            raise SystemExit("--compact requires at least one riff file.")
 
-        write_compact_pattern_file(args.file)
+        for file in args.files:
+            write_compact_pattern_file(file)
         return
 
-    file_pattern = None
-    file_step_duration = None
-    file_bpm = None
-    file_default_octave = None
-    file_default_root = None
+    if args.step_duration is not None and args.bpm is not None:
+        raise SystemExit("Use either --step-duration or --bpm, not both.")
 
-    if args.file:
+    tracks = []
+
+    if args.pattern:
+        bpm = args.bpm
+        step_duration = None if bpm is not None else (
+            args.step_duration
+            if args.step_duration is not None
+            else DEFAULT_STEP_DURATION
+        )
+        default_octave = args.default_octave if args.default_octave is not None else 4
+        tracks.append(
+            pattern_to_audio(
+                args.pattern,
+                step_duration=step_duration,
+                default_octave=default_octave,
+                default_root=args.default_root,
+                bpm=bpm,
+            )
+        )
+
+    for file in args.files:
         (
             file_pattern,
             file_step_duration,
             file_bpm,
             file_default_octave,
             file_default_root,
-        ) = read_pattern_file(args.file)
+        ) = read_pattern_file(file)
 
-    pattern = args.pattern or file_pattern
-    if not pattern:
-        raise SystemExit("Provide either a file or --pattern.")
+        if not file_pattern:
+            raise SystemExit(f"No pattern found in {file}.")
 
-    if args.step_duration is not None and args.bpm is not None:
-        raise SystemExit("Use either --step-duration or --bpm, not both.")
+        bpm = args.bpm if args.bpm is not None else file_bpm
 
-    bpm = args.bpm if args.bpm is not None else file_bpm
+        if args.step_duration is not None:
+            if file_bpm is not None:
+                raise SystemExit(
+                    f"Use either step_duration or bpm timing for {file}, not both."
+                )
+            step_duration = args.step_duration
+        elif bpm is not None:
+            step_duration = None
+        else:
+            step_duration = (
+                file_step_duration
+                if file_step_duration is not None
+                else DEFAULT_STEP_DURATION
+            )
 
-    if args.step_duration is not None:
-        if file_bpm is not None:
-            raise SystemExit("Use either step_duration or bpm timing, not both.")
-        step_duration = args.step_duration
-    elif bpm is not None:
-        step_duration = None
-    else:
-        step_duration = (
-            file_step_duration
-            if file_step_duration is not None
-            else DEFAULT_STEP_DURATION
+        default_octave = (
+            args.default_octave
+            if args.default_octave is not None
+            else file_default_octave
+            if file_default_octave is not None
+            else 4
+        )
+        default_root = (
+            args.default_root
+            if args.default_root is not None
+            else file_default_root
         )
 
-    default_octave = (
-        args.default_octave
-        if args.default_octave is not None
-        else file_default_octave
-        if file_default_octave is not None
-        else 4
-    )
-    default_root = (
-        args.default_root
-        if args.default_root is not None
-        else file_default_root
-    )
+        tracks.append(
+            pattern_to_audio(
+                file_pattern,
+                step_duration=step_duration,
+                default_octave=default_octave,
+                default_root=default_root,
+                bpm=bpm,
+            )
+        )
 
-    play_pattern(
-        pattern,
-        step_duration=step_duration,
-        default_octave=default_octave,
-        default_root=default_root,
-        bpm=bpm,
-    )
+    if not tracks:
+        raise SystemExit("Provide either at least one file or --pattern.")
+
+    play_audio(mix_audio_tracks(tracks))
 
 
 if __name__ == "__main__":

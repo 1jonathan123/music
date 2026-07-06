@@ -1,0 +1,16 @@
+step_duration = 0.125
+default_root = A3
+pattern =
+A---BC#--BA------
+A---BC#--AB------
+A---BC#--AA--BC#--
+AA--BC#--BA------
+
+
+A---BD--C#C#----
+A---BD--C#B----
+A---BD--AA--BD--
+AA--BD--BA--
+
+
+____

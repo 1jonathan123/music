@@ -1,0 +1,7 @@
+step_duration = 0.125
+default_root = A2
+pattern =
+E@E@-D@D@D@D@-
+E@E@-C@C@C@C@-
+E@E@-D@D@D@D@-
+E@-D@-C@---

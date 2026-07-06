@@ -1,0 +1,13 @@
+step_duration = 0.14
+default_root = A3
+pattern =
+A--DCBA-
+B--EDCB-
+C--FEDC-
+F-E-C---
+
+F--EDCB-
+E--DCBA-
+D--CBAA-
+C-B-A---
+___
