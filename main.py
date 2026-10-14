@@ -763,6 +763,24 @@ def mix_audio_tracks(tracks):
     return normalize_audio(mixed)
 
 
+def apply_track_volumes(tracks, volumes):
+    if volumes is None:
+        return tracks
+
+    if len(volumes) != len(tracks):
+        raise ValueError(
+            f"--volumes expects {len(tracks)} value(s), one per track."
+        )
+
+    if any(not np.isfinite(volume) or volume < 0 for volume in volumes):
+        raise ValueError("--volumes values must be finite and zero or greater.")
+
+    return [
+        track * volume
+        for track, volume in zip(tracks, volumes)
+    ]
+
+
 def play_audio(audio):
     sd.play(audio, SAMPLE_RATE)
     sd.wait()
@@ -859,6 +877,14 @@ def main():
         "files",
         nargs="*",
         help="Optional pattern file(s) to run at the same time.",
+    )
+
+    parser.add_argument(
+        "--volumes",
+        nargs="+",
+        type=float,
+        metavar="VOLUME",
+        help="Relative volume for each track, in playback order.",
     )
 
     parser.add_argument(
@@ -1019,6 +1045,11 @@ def main():
 
     if not tracks:
         raise SystemExit("Provide either at least one file or --pattern.")
+
+    try:
+        tracks = apply_track_volumes(tracks, args.volumes)
+    except ValueError as error:
+        raise SystemExit(str(error)) from error
 
     play_audio(mix_audio_tracks(tracks))
 

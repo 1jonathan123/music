@@ -4,45 +4,56 @@ pattern =
 % Now you are gone
 % but I will
 % remember you
-A----BC- -B----BC --D---DE F--E----
+%  A5        E5       D5      C5  
+A----BC- -B----BC --D---DE F-E-----
 
 % Deep in my heart
 % you will always
 % be true
+%   E5      D5        D5      D5
 G----FE- -F----FE --F---FE --D-----
 
 % Deep, in my heart,
 % you do...oo...
+% A5         E5      A5
 E----DC- -B----CA -A~-A~---
 
 % But, I don't live
 % inside, my own heart
+%  E5       A5        D5      A5
 B----CB- -C----C- -D----EF --E-----
 
 % so, forever, we are torn apart
+%   E5       D5       D5     D5
 G----FE- -F----FE --F---E- --D-----
 
 % Forever,
 % we do...oo..
+%  A5      E5         A5
 ED--C--- B----A-- --A~--A~--
 
 % Until the day
 % will come
 % [Will come!]
+%  A5       E5       A5        C5
 A----BC- -B----B- -C----A@- -G@------
 
 % Wh--en, I am also, gone [gone!]
+%   D5       A5      D5       E5
 D----E-F ---E-F-E ----F--D ---B2@----
 
 % Then, we will live
 % in the heart, 
 % of another man
+%   A5      E5        D5      D5
 A----BC- -B----BC --D---DE FEF-----
 
 % And, we'll be, together again
+%   E5       D5      D5        D5
 G----FE- -F----FE --F---E- --D-----
 
 % together again...
+%  A5       E5        A5
 ED--C--- B----A-- --A~--A~--
 ----
 ___

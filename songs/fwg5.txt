@@ -1,23 +1,23 @@
-step_duration = 0.1001
+step_duration = 0.1
 default_root = A3
 pattern =
 
 % Ever we are going forward
-AA-BCB-A -B-C-D--
+A-A-A-B-C-B---A- --B---C---D-----
 % Until we fall from the edge of the world
-EF-E-C-B BB-AAA--
+E-F---E---C---B- B-B---A-A-A-----
 % We have seen many things on our way
-AA-B-CBA -C-D-E--
+A-A---B---C-B-A- --C---D---E-----
 % But all we want is void and dismay
-EF-E-D-C -B-CBA--
-
+E-F---E---D---C- --B---C-B-A-----
+ 
 % -
-EF-E-D-C -B-CBA--
+--B---C-B-A-----
 
 % We rode the endless land
-AA-BCBA--
+A-A---BC--B-A---
 % We sailed a thousand miles
-A-G3--AB-A-G3-----
+A-G3---AB--A-G3---
 % But all - we found - is more sand and more tiles -
 G3-F3---G3---A---B- B-C---C-B-A-----
 
@@ -33,7 +33,7 @@ G3---F3---G3-A-B---
 C---B-C-B-A-A---
 
 % -
-% C---B-C-B-A-A---
+C---B-C-B-A-A---
 
 % Cause ever we are going forward
 A-A-A-B-C-B---A- --B---C---D-----
@@ -48,11 +48,11 @@ E-F---E---D---C- --B---C-B-A-----
 B---C-B-A---A@---
 
 % Ever walking on our feet
-A-A--B-C-B-A-A--
+A-A-B-C-B-A-A---
 % Ever sailing on our fleet
-A-G3--A-B-A-G3-G3--
+A-G3-A-B-A-G3-G3---
 % Ever feeling numb and pain
-G3-F3--G3-A-B-A-A--
+G3-F3-G3-A-B-A-A---
 % Ever hating this terrain
 F-E-D-C-B-A-A---
 
@@ -60,7 +60,7 @@ F-E-D-C-B-A-A---
 F-E-D-C-B-A-A---
 
 % Cause nothing here is new
-A--A---BC-B-A---
+A-A---BC--B-A---
 % Not the land, not you
 --G3--AB-A-G3-----
 % First time for everything - but very long ago

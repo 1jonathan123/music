@@ -1,15 +1,15 @@
-step_duration = 0.14
+step_duration = 0.16
 default_root = A3
 pattern =
-A----BC- -B----BC --D---DE F--E----
+A---BC-- B---BC-- D---DE-- F-E-----
 
-G----FE- -F----FE --F---FE --D-----
+G---FE-- F---FE-- F---FE-- D-------
 
-E----DC- -B----CA -A~-A~---
+E---DC-- B---CA-- A--A----
 
-B----CB- -C----C- -D----EF --E-----
+B---CB-- C---C--- D---EF-- E-------
 
-G----FE- -F----FE --F---E- --D-----
+G---FE-- F---FE-- F---E-- --D-----
 
 ED--C--- B----A-- --A~--A~--
 

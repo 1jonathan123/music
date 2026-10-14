@@ -1,0 +1,86 @@
+step_duration = 0.1
+default_root = A2
+pattern =
+
+% Ever we are going forward
+A@-A@-A@-A@-A@-A@-A@-A@- A@-A@-A@-A@-A@-A@-A@-A@-
+% Until we fall from the edge of the world
+E@-E@-E@-E@-E@-E@-E@-E@- E@-E@-E@-E@-E@-E@-E@-E@-
+% We have seen many things on our way
+A@-A@-A@-A@-A@-A@-A@-A@- A@-A@-A@-A@-A@-A@-A@-A@-
+% But all we want is void and dismay
+E@-E@-E@-E@-E@-E@-E@-E@- E@-E@-E@-E@-E@-E@-E@-E@-
+
+% -
+E@-E@-E@-E@-E@-E@-E@-E@-
+
+% We rode the endless land
+A@-A@-A@-A@-A@-A@-A@-A@-
+% We sailed a thousand miles
+A@-A@-A@-A@-A@-A@-A@-A@-
+% But all - we found - is more sand and more tiles -
+G2@-G2@-G2@-G2@-G2@-G2@-G2@-G2@- G2@-G2@-G2@-G2@-G2@-G2@-G2@-G2@-
+
+B@-B@-B@-B@-B@-B@-B@-B@-
+
+% The map contains it all
+A@-A@-A@-A@-A@-A@-A@-A@-
+% No matter where we crawl
+A@-A@-A@-A@-A@-A@-A@-A@-
+% Filled from end to end
+G2@-G2@-G2@-G2@-G2@-G2@-G2@-G2@-
+% No matter where we land
+C@-C@-C@-C@-C@-C@-C@-C@-
+
+% -
+C@-C@-C@-C@-C@-C@-C@-C@-
+
+% Cause ever we are going forward
+A@-A@-A@-A@-A@-A@-A@-A@- A@-A@-A@-A@-A@-A@-A@-A@-
+% Until we fall from the edge of the world
+E@-E@-E@-E@-E@-E@-E@-E@- E@-E@-E@-E@-E@-E@-E@-E@-
+% We have seen many things on our way
+A@-A@-A@-A@-A@-A@-A@-A@- A@-A@-A@-A@-A@-A@-A@-A@-
+% But all we want is void and dismay
+E@-E@-E@-E@-E@-E@-E@-E@- E@-E@-E@-E@-E@-E@-E@-E@-
+
+% -
+B@-B@-B@-B@-B@-B@-B@-B@-
+
+% Ever walking on our feet
+A@-A@-A@-A@-A@-A@-A@-A@-
+% Ever sailing on our fleet
+A@-A@-A@-A@-A@-A@-A@-A@-
+% Ever feeling numb and pain
+G2@-G2@-G2@-G2@-G2@-G2@-G2@-G2@-
+% Ever hating this terrain
+F@-F@-F@-F@-F@-F@-F@-F@-
+
+% -
+F@-F@-F@-F@-F@-F@-F@-F@-
+
+% Cause nothing here is new
+A@-A@-A@-A@-A@-A@-A@-A@-
+% Not the land, not you
+G2@-G2@-G2@-G2@-G2@-G2@-G2@-G2@-
+% First time for everything - but very long ago
+G2@-G2@-G2@-G2@-G2@-G2@-G2@-G2@- G2@-G2@-G2@-G2@-G2@-G2@-G2@-G2@-
+% Storm, tsunami, death and snow
+E@-E@-E@-E@-E@-E@-E@-E@- E@-E@-E@-E@-E@-E@-E@-E@-
+
+% -
+E@-E@-E@-E@-E@-E@-E@-E@- E@-E@-E@-E@-E@-E@-E@-E@-
+
+% Cause ever we are going forward
+A@-A@-A@-A@-A@-A@-A@-A@- A@-A@-A@-A@-A@-A@-A@-A@-
+% Until we fall from the edge of the world
+E@-E@-E@-E@-E@-E@-E@-E@- E@-E@-E@-E@-E@-E@-E@-E@-
+% We have seen many things on our way
+A@-A@-A@-A@-A@-A@-A@-A@- A@-A@-A@-A@-A@-A@-A@-A@-
+% But all we want is void and dismay
+E@-E@-E@-E@-E@-E@-E@-E@- E@-E@-E@-E@-E@-E@-E@-E@-
+
+% -
+B@-B@-B@-B@-B@-B@-B@-B@-
+
+____

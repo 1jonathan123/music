@@ -1,17 +1,85 @@
-step_duration = 0.2001
-default_root = A3
-pattern =
+E G A C
+E@ G@ A@ E@
 
 % Ever we are going forward
-%AABCB-A- B-C-D-X_
+E-E-F#-G-F#---E--- --F#---G---A-----
 % Until we fall from the edge of the world
-%EF-E-C-B BB-AAA--
+B-C---B---G---F#- F#-F#---E-E-E-----
 % We have seen many things on our way
-AB-C-BA- C-D-E-X_
+E-E---F#---G-F#-E- --G---A---B-----
 % But all we want is void and dismay
-EFE-D-C- B-CBA-X_
+B-C---B---A---G- --F#---G-F#-E-----
 
 % -
-B-CBA-X_
+--F#---G-F#-E-----
 
-___
+% We rode the endless land
+G-G---AB--A-G---
+% We sailed a thousand miles
+G-F#---GA--G-F#--- 
+% But all - we found - is more sand and more tiles -
+F#-E---F#---G---A- A-B---B-A-G-----
+
+A-B---B-A-G-----
+
+% The map contains it all
+G-G--AB-A-G-----
+% No matter where we crawl
+G-F#--GA-G-F#-----
+% Filled from end to end
+F#---E---F#-G-A---
+% No matter where we land
+B---A-B-A-G-G---
+
+% -
+B---A-B-A-G-G---
+
+% Cause ever we are going forward
+E-E-E-F#-G-F#---E- --F#---G---A-----
+% Until we fall from the edge of the world
+B-C---B---G---F#- F#-F#---E-E-E-----
+% We have seen many things on our way
+E-E---F#---G-F#-E- --G---A---B-----
+% But all we want is void and dismay
+B-C---B---A---G- --F#---G-F#-E-----
+
+% -
+F#---G-F#-E---E@---
+
+% Ever walking on our feet
+E-E-F#-G-F#-E-E---
+% Ever sailing on our fleet
+E-D-E-F#-E-D-D---
+% Ever feeling numb and pain
+D-C-D-E-F#-E-E---
+% Ever hating this terrain
+C-B-A-G-F#-E-E---
+
+% -
+C-B-A-G-F#-E-E---
+
+% Cause nothing here is new
+E-E---F#G--F#-E---
+% Not the land, not you
+--D--EF#-E-D-----
+% First time for everything - but very long ago
+D-C---D---E-E-D- --EF#--F#G--GF#----
+% Storm, tsunami, death and snow
+_B----A-G-F#----G ----F#----E------
+
+% -
+_B----A-G-F#----G ----F#----E------
+
+% Cause ever we are going forward
+E-E-E-F#-G-F#---E- --F#---G---A-----
+% Until we fall from the edge of the world
+B-C---B---G---F#- F#-F#---E-E-E-----
+% We have seen many things on our way
+E-E---F#---G-F#-E- --G---A---B-----
+% But all we want is void and dismay
+B-C---B---A---G- --F#---G-F#-E-----
+
+% -
+F#---G-F#-E---E@---
+
+____
