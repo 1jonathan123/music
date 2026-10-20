@@ -47,28 +47,28 @@ B-C---B---A---G- --F#---G-F#-E-----
 F#---G-F#-E---E@---
 
 % Ever walking on our feet
-E-E-F#-G-F#-E-E---
+G-G-A-B-A-G-G---
 % Ever sailing on our fleet
-E-D-E-F#-E-D-D---
+G-F#-G-A-G-F#-F#---
 % Ever feeling numb and pain
-D-C-D-E-F#-E-E---
+F#-E-F#-G-A-G-G---
 % Ever hating this terrain
-C-B-A-G-F#-E-E---
+E-D-C-B-A-G-G---
 
 % -
-C-B-A-G-F#-E-E---
+E-D-C-B-A-G-G---
 
 % Cause nothing here is new
-E-E---F#G--F#-E---
+G-G---AB--A-G---
 % Not the land, not you
---D--EF#-E-D-----
+--F#--GA-G-F#-----
 % First time for everything - but very long ago
-D-C---D---E-E-D- --EF#--F#G--GF#----
+F#-E---F#---G-G-F#- --GA--AB--BA----
 % Storm, tsunami, death and snow
-_B----A-G-F#----G ----F#----E------
+_D----C-B-A----B ----A----G------
 
 % -
-_B----A-G-F#----G ----F#----E------
+_D----C-B-A----B ----A----G------
 
 % Cause ever we are going forward
 E-E-E-F#-G-F#---E- --F#---G---A-----
@@ -81,5 +81,18 @@ B-C---B---A---G- --F#---G-F#-E-----
 
 % -
 F#---G-F#-E---E@---
+
+
+% Cause ever we are going forward
+B-B-B-C#-D-C#---B- --C#---D---E-----
+% Until we fall from the edge of the world
+F#-G---F#---D---C#- C#-C#---B-B-B-----
+% We have seen many things on our way
+B-B---C#---D-C#-B- --D---E---F#-----
+% But all we want is void and dismay
+F#-G---F#---E---D- --C#---D-C#-B-----
+
+% -
+C#---D-C#-B---B@---
 
 ____
